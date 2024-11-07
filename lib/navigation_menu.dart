@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:kiska_admin/features/shop/screens/banner/banner_screen.dart';
 import 'package:kiska_admin/features/shop/screens/category/category_screen.dart';
 import 'package:kiska_admin/features/shop/screens/home/home_screen.dart';
-import 'package:kiska_admin/features/shop/screens/product/product_screen.dart';
+import 'package:kiska_admin/features/shop/screens/product/Products_screen.dart';
+import 'package:kiska_admin/features/shop/screens/profile/profile_screen.dart';
 
 class NavigationMenu extends StatelessWidget {
   // Create an instance of the NavigationController
@@ -47,20 +49,24 @@ class NavigationMenu extends StatelessWidget {
             },
             tabs: const [
               GButton(
-                icon: Icons.home,
-                text: 'Home',
+                icon: Icons.assignment,
+                text: 'Orders',
               ),
               GButton(
-                icon: Iconsax.shop,
-                text: 'Store',
+                icon: Icons.inventory,
+                text: 'Products',
               ),
               GButton(
-                icon: Iconsax.heart,
-                text: 'Wishlist',
+                icon: Icons.category,
+                text: 'Categories',
               ),
               GButton(
-                icon: Iconsax.user,
-                text: 'Settings',
+                icon: Iconsax.image,
+                text: 'Banners',
+              ),
+              GButton(
+                icon: Icons.person,
+                text: 'Profile',
               ),
             ],
           ),
@@ -77,9 +83,10 @@ class NavigationController extends GetxController {
   // List of screens
   final screens = [
     const HomeScreen(),
-    const UploadScreen(),
+    const ProductsScreen(),
     const CategoryScreen(),
-    const UploadScreen(),
+    const BannerScreen(),
+    const ProfileScreen(),
   ];
 
   // Method to change the selected index

@@ -6,14 +6,14 @@ import 'package:kiska_admin/features/shop/controllers/category_controller.dart';
 import 'package:kiska_admin/features/shop/controllers/product_controller.dart';
 import 'package:kiska_admin/features/shop/models/category.dart';
 
-class UploadScreen extends StatefulWidget {
-  const UploadScreen({super.key});
+class AddProductScreen extends StatefulWidget {
+  const AddProductScreen({super.key});
 
   @override
-  State<UploadScreen> createState() => _UploadScreenState();
+  State<AddProductScreen> createState() => _AddProductScreenState();
 }
 
-class _UploadScreenState extends State<UploadScreen> {
+class _AddProductScreenState extends State<AddProductScreen> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final ProductController _productController = ProductController();
   late Future<List<Category>> futureCategories;
@@ -233,7 +233,7 @@ class _UploadScreenState extends State<UploadScreen> {
                       },
                       child: const Text(
                         'Submit',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Color.fromARGB(255, 10, 5, 5)),
                       ),
                     ),
                   )

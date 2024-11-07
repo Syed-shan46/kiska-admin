@@ -55,22 +55,23 @@ class Product {
   // The map is typically received from an external source like a database or API.
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      id: map['id']
-          as String, // Extracts the `id` from the map and assigns it to the `id` field.
-      productName: map['productName']
-          as String, // Extracts the `productName` from the map and assigns it.
-      productPrice: map['productPrice']
-          as int, // Extracts the `productPrice` from the map and assigns it.
-      quantity: map['quantity']
-          as int, // Extracts the `quantity` from the map and assigns it.
-      description: map['description']
-          as String, // Extracts the `description` from the map and assigns it.
-      category: map['category']
-          as String, // Extracts the `category` from the map and assigns it.
-      // The `images` field is extracted as a list from the map. The `List<String>.from` method ensures
-      // that the list is properly cast to a list of strings.
-      images: List<String>.from((map['images'] as List<String>)),
-    );
+        id: map['_id']
+            as String, // Extracts the `id` from the map and assigns it to the `id` field.
+        productName: map['productName']
+            as String, // Extracts the `productName` from the map and assigns it.
+        productPrice: map['productPrice']
+            as int, // Extracts the `productPrice` from the map and assigns it.
+        quantity: map['quantity']
+            as int, // Extracts the `quantity` from the map and assigns it.
+        description: map['description']
+            as String, // Extracts the `description` from the map and assigns it.
+        category: map['category']
+            as String, // Extracts the `category` from the map and assigns it.
+        // The `images` field is extracted as a list from the map. The `List<String>.from` method ensures
+        // that the list is properly cast to a list of strings.
+        images: List<String>.from(
+          map['images'].map((item) => item.toString()),
+        ));
   }
 
   // Method `toJson` converts the `Product` object to a JSON string by first calling `toMap`

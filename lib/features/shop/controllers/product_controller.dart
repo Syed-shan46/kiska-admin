@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloudinary_public/cloudinary_public.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kiska_admin/features/shop/global_variables.dart';
 import 'package:kiska_admin/features/shop/models/product.dart';
 import 'package:kiska_admin/services/http_response.dart';
@@ -17,47 +19,88 @@ class ProductController {
     required context,
   }) async {
     try {
-      if (pickedImages != null) {
-        final cloudinary = CloudinaryPublic("dwhidbfrj", "rhimclrg");
-        List<String> images = [];
-        for (var i = 0; i < pickedImages.length; i++) {
-          CloudinaryResponse cloudinaryResponse = await cloudinary.uploadFile(
-            CloudinaryFile.fromFile(pickedImages[i].path, folder: productName),
-          );
-          images.add(cloudinaryResponse.secureUrl);
-        }
+      final cloudinary = CloudinaryPublic("dwhidbfrj", "rhimclrg");
+      List<String> images = [];
+      for (var i = 0; i < pickedImages.length; i++) {
+        CloudinaryResponse cloudinaryResponse = await cloudinary.uploadFile(
+          CloudinaryFile.fromFile(pickedImages[i].path, folder: productName),
+        );
+        images.add(cloudinaryResponse.secureUrl);
+      }
 
-        if (category.isNotEmpty) {
-          final Product product = Product(
-              id: 'id',
-              productName: productName,
-              productPrice: productPrice,
-              quantity: quantity,
-              description: description,
-              category: category,
-              images: images);
+      if (category.isNotEmpty) {
+        final Product product = Product(
+            id: 'id',
+            productName: productName,
+            productPrice: productPrice,
+            quantity: quantity,
+            description: description,
+            category: category,
+            images: images);
 
-          http.Response response = await http.post(
-            Uri.parse('$uri/api/add-product'),
-            body: product.toJson(),
-            headers: <String, String>{
-              "Content-Type": "application/json; charset=UTF-8",
-            },
-          );
+        http.Response response = await http.post(
+          Uri.parse('$uri/api/add-product'),
+          body: product.toJson(),
+          headers: <String, String>{
+            "Content-Type": "application/json; charset=UTF-8",
+          },
+        );
 
-          manageHttpResponse(
-            response: response,
-            context: context,
-            onSuccess: () {
-              showSnackBar(context, "Product uploaded");
-            },
-          );
-        }
-      } else {
-        showSnackBar(context, 'Select Image');
+        manageHttpResponse(
+          response: response,
+          context: context,
+          onSuccess: () {
+            showSnackBar(context, "Product uploaded");
+          },
+        );
       }
     } catch (e) {
       showSnackBar(context, 'Error: $e');
+    }
+  }
+
+  Future<List<Product>> loadProducts() async {
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/api/products'),
+        headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body) as List<dynamic>;
+
+        List<Product> products = data
+            .map((product) => Product.fromMap(product as Map<String, dynamic>))
+            .toList();
+
+        return products;
+      } else {
+        throw Exception('Failed to Load Products');
+      }
+    } catch (e) {
+      throw Exception('Error loading Products $e');
+    }
+  }
+
+  // Fetch Product by ID
+  Future<Product> fetchProduct(String id) async {
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/api/products/$id'),
+        headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return Product.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to load product');
+      }
+    } catch (e) {
+      throw Exception('Failed , Error: $e');
     }
   }
 }
