@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:kiska_admin/features/shop/global_variables.dart';
 import 'package:kiska_admin/features/shop/models/product.dart';
 import 'package:kiska_admin/services/http_response.dart';
@@ -101,6 +100,21 @@ class ProductController {
       }
     } catch (e) {
       throw Exception('Failed , Error: $e');
+    }
+  }
+
+  // Function to delete a product from the backend
+  Future<void> deleteProductFromBackend(String productId) async {
+    final response = await http.delete(
+      Uri.parse('$uri/api/products/$productId'),
+    );
+
+    if (response.statusCode == 200) {
+      // Product deleted successfully
+      print('Product deleted from backend');
+    } else {
+      // Handle the error from the backend
+      throw Exception('Failed to delete product from backend');
     }
   }
 }
