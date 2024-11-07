@@ -7,6 +7,7 @@ class CategoryProvider extends StateNotifier<List<Category>> {
   void setCategories(List<Category> categories) {
     state = categories;
   }
+  
 }
 
 final categoryProvider =

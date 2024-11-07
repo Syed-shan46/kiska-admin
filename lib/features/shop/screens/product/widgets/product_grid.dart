@@ -40,7 +40,7 @@ class _MyProductGridState extends ConsumerState<MyProductGrid> {
             crossAxisCount: 2,
             crossAxisSpacing: 5,
             mainAxisSpacing: 5,
-            childAspectRatio: 0.8),
+            childAspectRatio: 0.9),
         itemCount: products.length,
         itemBuilder: (context, index) {
           final product = products[index];

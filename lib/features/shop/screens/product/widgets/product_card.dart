@@ -22,7 +22,6 @@ class MyProductCard extends ConsumerStatefulWidget {
   final Product? product;
 
   @override
-  // ignore: library_private_types_in_public_api
   _MyProductCardState createState() => _MyProductCardState();
 }
 
@@ -33,42 +32,43 @@ class _MyProductCardState extends ConsumerState<MyProductCard> {
   @override
   void initState() {
     super.initState();
-    // Check if the product is already in the cart and set isAdded accordingly
+    // Additional initialization if needed
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap,
-      //box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         child: Card(
-          elevation: 1,
+          elevation: 0,
+          color: Colors.transparent,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Stack(
                 children: [
                   Image.network(
+                    widget.imageUrl,
+                    fit: BoxFit.contain,
+                    height: 120,
+                    width: double.infinity,
                     loadingBuilder: (BuildContext context, Widget child,
                         ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) {
                         return child; // Image loaded successfully
                       } else {
-                        // Show a progress indicator while the image is loading
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
                     },
-                    widget.imageUrl,
-                    fit: BoxFit.contain,
-                    height: 120,
-                    width: double.infinity,
                     errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons
-                          .error); // Optionally, show an error icon if the image fails to load
+                      return const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ); // Show error icon if the image fails to load
                     },
                   ),
                   Positioned(
@@ -77,17 +77,18 @@ class _MyProductCardState extends ConsumerState<MyProductCard> {
                     child: Container(
                       width: 40,
                       height: 40,
-                      decoration: const BoxDecoration(
-                          color: Colors.blue, shape: BoxShape.circle),
+                      decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.8),
+                          shape: BoxShape.circle),
                       child: IconButton(
                           onPressed: () {
                             setState(() {
                               isFavorited = !isFavorited;
                             });
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.edit,
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(0.9),
                           )),
                     ),
                   ),
@@ -97,8 +98,9 @@ class _MyProductCardState extends ConsumerState<MyProductCard> {
                     child: Container(
                       width: 40,
                       height: 40,
-                      decoration: const BoxDecoration(
-                          color: Colors.red, shape: BoxShape.circle),
+                      decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.8),
+                          shape: BoxShape.circle),
                       child: IconButton(
                           onPressed: () async {
                             final shouldDelete = await showDialog<bool>(
@@ -128,28 +130,35 @@ class _MyProductCardState extends ConsumerState<MyProductCard> {
                               },
                             );
 
-                            // If user confirmed deletion, proceed with the delete function
                             if (shouldDelete == true) {
                               try {
                                 await ref
                                     .read(productProvider.notifier)
                                     .deleteProduct(widget.productId);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
                                       content:
-                                          Text('Product deleted successfully')),
-                                );
+                                          Text('Product deleted successfully'),
+                                    ),
+                                  );
+                                }
                               } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Error deleting product')),
-                                );
+                                print(
+                                    "Error deleting product: $e"); // Log error
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Error deleting product')),
+                                  );
+                                }
                               }
                             }
                           },
-                          icon: const Icon(
+                          icon:  Icon(
                             Icons.delete,
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(0.9),
                           )),
                     ),
                   ),
@@ -181,7 +190,7 @@ class _MyProductCardState extends ConsumerState<MyProductCard> {
                 ),
               ),
 
-              // Cart Button
+              // Price and Discount
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -206,7 +215,6 @@ class _MyProductCardState extends ConsumerState<MyProductCard> {
                       ],
                     ),
                   ),
-                  // Cart Button
                 ],
               ),
             ],
