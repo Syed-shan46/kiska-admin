@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cloudinary_public/cloudinary_public.dart';
-import 'package:flutter/material.dart';
 import 'package:kiska_admin/features/shop/global_variables.dart';
 import 'package:kiska_admin/features/shop/models/product.dart';
 import 'package:kiska_admin/services/http_response.dart';
