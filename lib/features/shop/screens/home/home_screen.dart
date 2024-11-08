@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kiska_admin/features/shop/controllers/order_controller.dart';
+import 'package:kiska_admin/features/shop/global_variables.dart';
 import 'package:kiska_admin/features/shop/models/order.dart';
 import 'package:kiska_admin/providers/order_provider.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -217,13 +221,53 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                 foregroundColor: Colors.white),
                                             onPressed: () {},
                                             child: const Text('Cancel')),
-                                            const SizedBox(width: 16),
+                                        const SizedBox(width: 16),
                                         ElevatedButton(
                                             style: ElevatedButton.styleFrom(
                                                 backgroundColor: Colors.blue
                                                     .withOpacity(0.9),
                                                 foregroundColor: Colors.white),
-                                            onPressed: () {},
+                                            onPressed: () async {
+                                              final orderId = order.id;
+                                              print(
+                                                  'Order ID: $orderId'); // Log the order ID to ensure it's valid
+                                              if (orderId == null ||
+                                                  orderId.isEmpty) {
+                                                print('Invalid order ID');
+                                                return;
+                                              }
+
+                                              try {
+                                                final response =
+                                                    await http.post(
+                                                  Uri.parse(
+                                                      '$uri/api/accept-order'),
+                                                  headers: {
+                                                    'Content-Type':
+                                                        'application/json',
+                                                  },
+                                                  body: json.encode({
+                                                    'orderId':
+                                                        orderId, // Pass the order ID to the server
+                                                  }),
+                                                );
+
+                                                if (response.statusCode ==
+                                                    200) {
+                                                  // Handle success (you can show a success message, update UI, etc.)
+                                                  print('Order accepted');
+                                                } else {
+                                                  // Handle error (you can show an error message)
+                                                  print(
+                                                      'Error accepting order: ${response.statusCode}');
+                                                  print(
+                                                      'Response body: ${response.body}'); // Log the response body for more insights
+                                                }
+                                              } catch (e) {
+                                                print(
+                                                    'Error: $e'); // Catch any exception and log it
+                                              }
+                                            },
                                             child: const Text('Accept')),
                                       ],
                                     )

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:kiska_admin/features/shop/global_variables.dart';
 import 'package:kiska_admin/features/shop/models/product.dart';
-import 'package:kiska_admin/services/http_response.dart';
-import 'package:http/http.dart' as http;
+  import 'package:kiska_admin/services/http_response.dart';
+  import 'package:http/http.dart' as http;
 
 class ProductController {
   void uploadProduct({

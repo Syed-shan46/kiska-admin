@@ -1,8 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Order {
-  final String id;
+  final String id; // Order ID (MongoDB _id)
+  final String userId; // User ID (refers to the user who placed the order)
   final String name;
   final String phone;
   final String country;
@@ -11,20 +11,22 @@ class Order {
   final String state;
   final String pin;
   final String productName;
-  final int quantity;
+  final int quantity; // Ensuring quantity is an integer
   final String category;
   final String image;
-  final int totalAmount;
-  final String paymentStatus;
-  final bool delivered;
+  final int totalAmount; // Ensuring totalAmount is an integer
+  final String paymentStatus; // Payment status like 'Pending', 'Success'
+  final bool delivered; // Boolean for delivered status
+
   Order({
     required this.id,
+    required this.userId, // Include userId
     required this.name,
     required this.phone,
     required this.country,
     required this.city,
-    required this.pin,
     required this.state,
+    required this.pin,
     required this.address,
     required this.productName,
     required this.quantity,
@@ -35,9 +37,11 @@ class Order {
     required this.delivered,
   });
 
+  // Convert the Order object to a Map
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'userId': id,
+    return {
+      'id': id, // MongoDB _id
+      'userId': userId, // Reference to the user who placed the order
       'name': name,
       'phone': phone,
       'country': country,
@@ -55,11 +59,14 @@ class Order {
     };
   }
 
+  // Convert the Order object to JSON
   String toJson() => json.encode(toMap());
 
+  // Factory constructor to create an Order from a Map (e.g., from a response)
   factory Order.fromJson(Map<String, dynamic> map) {
     return Order(
-      id: map['userId'] as String? ?? '', // Default to empty string if null
+      id: map['_id'] as String? ?? '', // MongoDB _id is typically returned as '_id'
+      userId: map['userId'] as String? ?? '', // Add userId from the response
       name: map['name'] as String? ?? '',
       phone: map['phone'] as String? ?? '',
       state: map['state'] as String? ?? '',

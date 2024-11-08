@@ -39,36 +39,36 @@ class _CategoryWidgetState extends ConsumerState<CategoryWidget> {
               return Column(
                 children: [
                   InkWell(
-                    onTap: () async{
+                    onTap: () async {
+                      // ignore: unused_local_variable
                       final shouldDelete = await showDialog<bool>(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Delete Product'),
-                                  content: const Text(
-                                      'Are you sure you want to delete this product?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(false); // User pressed "No"
-                                      },
-                                      child: const Text('No'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(true); // User pressed "Yes"
-                                      },
-                                      child: const Text('Yes'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Delete Product'),
+                            content: const Text(
+                                'Are you sure you want to delete this product?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(false); // User pressed "No"
+                                },
+                                child: const Text('No'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(true); // User pressed "Yes"
+                                },
+                                child: const Text('Yes'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     child: Container(
-
                       width: 50,
                       height: 50,
                       margin: const EdgeInsets.symmetric(horizontal: 8.0),
